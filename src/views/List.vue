@@ -44,7 +44,7 @@
           <template slot="[action]" slot-scope="data">
             <div class="text-nowrap">
               <router-link :to="`/football/edituser/${data.item.id}`"> 
-                <font-awesome-icon class="action-icon" icon="edit" @click="editRecord(data.item.id)" />
+                <font-awesome-icon class="action-icon" icon="edit" />
               </router-link>
               <font-awesome-icon
                 class="action-icon"
@@ -92,9 +92,6 @@ export default {
     },
     removeRecord(id) {
       this.deleteUser(id)
-    },
-    editRecord() {
-      // console.log(id)
     }
   },
   computed: {

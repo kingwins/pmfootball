@@ -69,7 +69,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { log } from 'util'
 
 export default {
   name: 'List',
@@ -94,7 +93,7 @@ export default {
     removeRecord(id) {
       this.deleteUser(id)
     },
-    editRecord(id) {
+    editRecord() {
       // console.log(id)
     }
   },

@@ -5,33 +5,38 @@
     <div class="user-list">
       <div class="row">
         <b-col cols="12" sm="6" xl="4">
-          <b-form-input type="text" class="searchInput" placeholder="Search for users..."></b-form-input>
+          <b-form-input
+            type="text"
+            class="searchInput"
+            v-model="filter"
+            placeholder="Filter users..."
+          ></b-form-input>
           <font-awesome-icon icon="search" class="search-icon" />
         </b-col>
         <b-col cols="12" sm="6" xl="8" class="d-sm-flex justify-content-end py-5 py-sm-0">
-          <b-button class="button-add" variant="success" pill to="/football/adduser" >
+          <b-button class="button-add" variant="success" pill to="/football/adduser">
             <font-awesome-icon class="plus-icon" icon="plus" />Add User
           </b-button>
         </b-col>
       </div>
-      <br>
-      <hr>
-      <br>
+      <br />
+      <hr />
+      <br />
 
       <div class="overflow-auto">
         <b-table
           id="my-table"
-          :items="allUsers.data"
+          :items="filteredUsers"
           :current-page="allUsers.page"
           :fields="fields"
           small
           borderless
           striped
           hover
-          class="text-left"    
+          class="text-left"
         >
           <!-- primary-key="id"
-          :tbody-transition-props="transProps" -->
+          :tbody-transition-props="transProps"-->
 
           <!-- A virtual column -->
           <template slot="[avatar]" slot-scope="data">
@@ -43,7 +48,7 @@
           >{{ data.item.first_name }} {{ data.item.last_name}}</template>
           <template slot="[action]" slot-scope="data">
             <div class="text-nowrap">
-              <router-link :to="`/football/edituser/${data.item.id}`"> 
+              <router-link :to="`/football/edituser/${data.item.id}`">
                 <font-awesome-icon class="action-icon" icon="edit" />
               </router-link>
               <font-awesome-icon
@@ -74,6 +79,7 @@ export default {
   name: 'List',
   data() {
     return {
+      filter: null,
       transProps: {
         // Transition name
         name: 'animate-list'
@@ -86,7 +92,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUsers', 'deleteUser']),    
+    ...mapActions(['fetchUsers', 'deleteUser']),
     changedPage(nr) {
       this.fetchUsers(nr)
     },
@@ -95,11 +101,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allUsers'])
-  },
-  created() {
-    // this.fetchUsers()
-    // console.log('created hook')
+    ...mapGetters(['allUsers']),
+    filteredUsers() {
+      let matchesFilter = new RegExp(this.filter, 'i')
+      if (this.filter) {
+        return this.allUsers.data.filter(item => matchesFilter.test(item.last_name ) || matchesFilter.test(item.first_name ))
+      }
+      else {
+        return this.allUsers.data
+      }
+    }
   }
 }
 </script>
@@ -155,8 +166,7 @@ export default {
   padding: 10px 20px !important;
   background: #459672 !important;
   transition: all 0.3s ease;
-  border: none !important;  
-
+  border: none !important;
 }
 .button-add:hover {
   background: #307455 !important;
